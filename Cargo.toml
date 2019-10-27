@@ -1,0 +1,8 @@
+[package]
+name = "rust-lisp"
+version = "0.1.0"
+authors = ["fireflower0 <fireflower0@hotmail.co.jp>"]
+edition = "2018"
+
+[dependencies]
+rustyline = "1.0.0"
