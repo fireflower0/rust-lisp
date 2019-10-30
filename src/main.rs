@@ -1,5 +1,13 @@
-extern crate rustyline;
+#[macro_use]
+extern crate lazy_static;
+extern crate fnv;
+extern crate itertools;
+extern crate regex;
 
+#[macro_use]
+mod types;
+
+extern crate rustyline;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 
