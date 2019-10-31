@@ -4,12 +4,13 @@ extern crate fnv;
 extern crate itertools;
 extern crate regex;
 
-#[macro_use]
-mod types;
-
 extern crate rustyline;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
+
+#[macro_use]
+#[allow(dead_code)]
+mod types;
 
 fn main() {
     let mut r1 = Editor::<()>::new();
