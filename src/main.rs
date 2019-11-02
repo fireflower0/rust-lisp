@@ -12,6 +12,9 @@ use rustyline::Editor;
 #[allow(dead_code)]
 mod types;
 
+#[allow(dead_code)]
+mod env;
+
 fn main() {
     let mut r1 = Editor::<()>::new();
 
