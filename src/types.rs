@@ -50,6 +50,8 @@ pub enum RlErr {
 pub type RlArgs = Vec<RlVal>;
 pub type RlRet  = Result<RlVal, RlErr>;
 
+// Macro
+
 macro_rules! list {
     ($seq:expr) => {{
         List(Rc::new($seq), Rc::new(Nil))
@@ -59,6 +61,18 @@ macro_rules! list {
         List(Rc::new(v), Rc::new(Nil))
     }}
 }
+
+macro_rules! vector {
+    ($seq:expr) => {{
+        Vector(Rc::new($seq), Rc::new(Nil))
+    }};
+    [$($args:expr), *] => {{
+        let v: Vec<RlVal> = vec![$($args), *];
+        Vector(Rc::new(v), Rc::new(Nil))
+    }}
+}
+
+// Functions
 
 pub fn error(s: &str) -> RlRet {
     Err(ErrString(s.to_string()))
