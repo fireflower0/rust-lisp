@@ -85,6 +85,10 @@ fn read_form(rdr: &mut Reader) -> RlRet {
             let _ = rdr.next();
             Ok(list![Sym("quasiquote".to_string()), read_form(rdr)?])
         }
+        "~" => {
+            let _ = rdr.next();
+            Ok(list![Sym("unquote".to_string()), read_form(rdr)?])
+        }
         _ => read_atom(rdr),
     }
 }
