@@ -81,11 +81,15 @@ fn read_form(rdr: &mut Reader) -> RlRet {
             let _ = rdr.next();
             Ok(list![Sym("quote".to_string()), read_form(rdr)?])
         }
+        "`" => {
+            let _ = rdr.next();
+            Ok(list![Sym("quasiquote".to_string()), read_form(rdr)?])
+        }
         _ => read_atom(rdr),
     }
 }
 
-pub fn read_string(str: String) -> RlRet {
+pub fn read_str(str: String) -> RlRet {
     let tokens = tokenize(&str);
     if tokens.len() == 0 {
         return error("no input");
