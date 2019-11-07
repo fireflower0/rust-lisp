@@ -93,6 +93,11 @@ fn read_form(rdr: &mut Reader) -> RlRet {
             let _ = rdr.next();
             Ok(list![Sym("splice-unquote".to_string()), read_form(rdr)?])
         }
+        "^" => {
+            let _ = rdr.next();
+            let meta = read_form(rdr)?;
+            Ok(list![Sym("with-meta".to_string()), read_form(rdr)?, meta])
+        }
         _ => read_atom(rdr),
     }
 }
