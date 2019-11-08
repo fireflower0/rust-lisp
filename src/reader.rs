@@ -98,6 +98,10 @@ fn read_form(rdr: &mut Reader) -> RlRet {
             let meta = read_form(rdr)?;
             Ok(list![Sym("with-meta".to_string()), read_form(rdr)?, meta])
         }
+        "@" => {
+            let _ = rdr.next();
+            Ok(list![Sym("deref".to_string()), read_form(rdr)?])
+        }
         _ => read_atom(rdr),
     }
 }
