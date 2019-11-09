@@ -74,6 +74,28 @@ fn read_atom(rdr: &mut Reader) -> RlRet {
     }
 }
 
+fn read_seq(rdr: &mut Reader, end: &str) -> RlRet {
+    let mut seq: Vec<RlVal> = vec![];
+    rdr.next()?;
+    loop {
+        let token = match rdr.peek() {
+            Ok(t) => t,
+            Err(_) => return error(&format!("expected '{}', got EOF", end)),
+        };
+        if token == end {
+            break;
+        }
+        seq.push(read_form(rdr)?)
+    }
+    let _ = rdr.next();
+    match end {
+        ")" => Ok(list!(seq)),
+        "]" => Ok(vector!(seq)),
+        "}" => hash_map(seq),
+        _ => error("read_seq unknown end value"),
+    }
+}
+
 fn read_form(rdr: &mut Reader) -> RlRet {
     let token = rdr.peek()?;
     match &token[..] {
@@ -102,6 +124,8 @@ fn read_form(rdr: &mut Reader) -> RlRet {
             let _ = rdr.next();
             Ok(list![Sym("deref".to_string()), read_form(rdr)?])
         }
+        ")" => error("unexpected ')'"),
+        "(" => read_seq(rdr, ")"),
         _ => read_atom(rdr),
     }
 }
