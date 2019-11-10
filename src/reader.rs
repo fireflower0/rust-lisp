@@ -126,6 +126,8 @@ fn read_form(rdr: &mut Reader) -> RlRet {
         }
         ")" => error("unexpected ')'"),
         "(" => read_seq(rdr, ")"),
+        "]" => error("unexpected ']'"),
+        "[" => read_seq(rdr, "]"),
         _ => read_atom(rdr),
     }
 }
