@@ -54,6 +54,15 @@ fn tokenize(str: &str) -> Vec<String> {
     res
 }
 
+fn unescape_str(s: &str) -> String {
+    lazy_static! {
+        static ref RE: Regex = Regex::new(r#"\\(.)"#).unwrap();
+    }
+    RE.replace_all(&s, |caps: &Captures| {
+        format!("{}", if &caps[1] == "n" { "\n" } else { &caps[1] })
+    }).to_string()
+}
+
 fn read_atom(rdr: &mut Reader) -> RlRet {
     lazy_static! {
         static ref INT_RE: Regex = Regex::new(r"^-?[0-9]+$").unwrap();
