@@ -76,6 +76,8 @@ fn read_atom(rdr: &mut Reader) -> RlRet {
         _ => {
             if INT_RE.is_match(&token) {
                 Ok(Int(token.parse().unwrap()))
+            } else if STR_RE.is_match(&token) {
+                Ok(Str(unescape_str(&token[1..token.len() - 1])))
             } else {
                 Ok(Sym(token.to_string()))
             }
