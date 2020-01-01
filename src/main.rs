@@ -11,6 +11,7 @@ use rustyline::Editor;
 #[macro_use]
 #[allow(dead_code)]
 mod types;
+mod printer;
 mod reader;
 
 #[allow(dead_code)]
