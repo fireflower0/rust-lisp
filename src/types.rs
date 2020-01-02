@@ -1,23 +1,11 @@
-use std::cell::RefCell;
-use std::rc::Rc;
 use fnv::FnvHashMap;
 use itertools::Itertools;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use crate::env::{env_bind, Env};
 use crate::types::RlErr::{ErrRlVal, ErrString};
-use crate::types::RlVal::{
-    Atom,
-    Bool,
-    Func,
-    Hash,
-    Int,
-    List,
-    RlFunc,
-    Nil,
-    Str,
-    Sym,
-    Vector
-};
+use crate::types::RlVal::{Atom, Bool, Func, Hash, Int, List, Nil, RlFunc, Str, Sym, Vector};
 
 #[derive(Debug, Clone)]
 pub enum RlVal {
@@ -48,7 +36,7 @@ pub enum RlErr {
 }
 
 pub type RlArgs = Vec<RlVal>;
-pub type RlRet  = Result<RlVal, RlErr>;
+pub type RlRet = Result<RlVal, RlErr>;
 
 // Macro
 
@@ -73,6 +61,27 @@ macro_rules! vector {
 }
 
 // Functions
+
+impl RlVal {
+    pub fn apply(&self, args: RlArgs) -> RlRet {
+        match *self {
+            Func(f, _) => f(args),
+            RlFunc {
+                eval,
+                ref ast,
+                ref env,
+                ref params,
+                ..
+            } => {
+                let a = &**ast;
+                let p = &**params;
+                let fn_env = env_bind(Some(env.clone()), p.clone(), args)?;
+                Ok(eval(a.clone(), fn_env)?)
+            }
+            _ => error("attempt to call non-function"),
+        }
+    }
+}
 
 pub fn error(s: &str) -> RlRet {
     Err(ErrString(s.to_string()))
