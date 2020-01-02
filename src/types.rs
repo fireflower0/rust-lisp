@@ -63,6 +63,14 @@ macro_rules! vector {
 // Functions
 
 impl RlVal {
+    pub fn keyword(&self) -> RlRet {
+        match self {
+            Str(s) if s.starts_with("\u{29e}") => Ok(Str(s.to_string())),
+            Str(s) => Ok(Str(format!("\u{29e}{}", s))),
+            _ => error("invalid type for keyword"),
+        }
+    }
+
     pub fn apply(&self, args: RlArgs) -> RlRet {
         match *self {
             Func(f, _) => f(args),
