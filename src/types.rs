@@ -71,6 +71,14 @@ impl RlVal {
         }
     }
 
+    pub fn empty_q(&self) -> RlRet {
+        match self {
+            List(l, _) | Vector(l, _) => Ok(Bool(l.len() == 0)),
+            Nil => Ok(Bool(true)),
+            _ => error("invalid type for empty?"),
+        }
+    }
+
     pub fn apply(&self, args: RlArgs) -> RlRet {
         match *self {
             Func(f, _) => f(args),
