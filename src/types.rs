@@ -118,6 +118,21 @@ pub fn _assoc(mut hm: FnvHashMap<String, RlVal>, kvs: RlArgs) -> RlRet {
     Ok(Hash(Rc::new(hm), Rc::new(Nil)))
 }
 
+pub fn _dissoc(mut hm: FnvHashMap<String, RlVal>, kvs: RlArgs) -> RlRet {
+    if kvs.len() % 2 != 0 {
+        return error("odd number of elements");
+    }
+    for (k, v) in kvs.iter().tuples() {
+        match k {
+            Str(s) => {
+                hm.insert(s.to_string(), v.clone());
+            }
+            _ => return error("key is not string"),
+        }
+    }
+    Ok(Hash(Rc::new(hm), Rc::new(Nil)))
+}
+
 pub fn hash_map(kvs: RlArgs) -> RlRet {
     let hm: FnvHashMap<String, RlVal> = FnvHashMap::default();
     _assoc(hm, kvs)
