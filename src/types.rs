@@ -79,6 +79,14 @@ impl RlVal {
         }
     }
 
+    pub fn count(&self) -> RlRet {
+        match self {
+            List(l, _) | Vector(l, _) => Ok(Int(l.len() as i64)),
+            Nil => Ok(Int(0)),
+            _ => error("invalid type for count"),
+        }
+    }
+
     pub fn apply(&self, args: RlArgs) -> RlRet {
         match *self {
             Func(f, _) => f(args),
