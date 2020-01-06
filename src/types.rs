@@ -105,6 +105,13 @@ impl RlVal {
             _ => error("attempt to call non-function"),
         }
     }
+
+    pub fn keyword_q(&self) -> bool {
+        match self {
+            Str(s) if s.starts_with("\u{29e}") => true,
+            _ => false,
+        }
+    }
 }
 
 pub fn error(s: &str) -> RlRet {
