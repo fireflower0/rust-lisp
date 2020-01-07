@@ -112,6 +112,13 @@ impl RlVal {
             _ => false,
         }
     }
+
+    pub fn deref(&self) -> RlRet {
+        match self {
+            Atom(a) => Ok(a.borrow().clone()),
+            _ => error("attempt to defef a non-Atom"),
+        }
+    }
 }
 
 pub fn error(s: &str) -> RlRet {
