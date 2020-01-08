@@ -119,6 +119,16 @@ impl RlVal {
             _ => error("attempt to defef a non-Atom"),
         }
     }
+
+    pub fn reset_bang(&self, new: &RlVal) -> RlRet {
+        match self {
+            Atom(a) => {
+                *a.borrow_mut() = new.clone();
+                Ok(new.clone())
+            }
+            _ => error("attempt to reset! a non-Atom"),
+        }
+    }
 }
 
 pub fn error(s: &str) -> RlRet {
