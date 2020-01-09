@@ -129,6 +129,19 @@ impl RlVal {
             _ => error("attempt to reset! a non-Atom"),
         }
     }
+
+    pub fn swap_bang(&self, args: &RlArgs) -> RlRet {
+        match self {
+            Atom(a) => {
+                let f = &args[0];
+                let mut fargs = args[1..].to_vec();
+                fargs.insert(0, a.borrow().clone());
+                *a.borrow_mut() = f.apply(fargs)?;
+                Ok(a.borrow().clone())
+            }
+            _ => error("attempt to swap! a non-Atom"),
+        }
+    }
 }
 
 pub fn error(s: &str) -> RlRet {
