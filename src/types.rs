@@ -142,6 +142,15 @@ impl RlVal {
             _ => error("attempt to swap! a non-Atom"),
         }
     }
+
+    pub fn get_meta(&self) -> RlRet {
+        match self {
+            List(_, meta) | Vector(_, meta) | Hash(_, meta) => Ok((&**meta).clone()),
+            Func(_, meta) => Ok((&**meta).clone()),
+            RlFunc { meta, .. } => Ok((&**meta).clone()),
+            _ => error("meta not supported by type"),
+        }
+    }
 }
 
 pub fn error(s: &str) -> RlRet {
