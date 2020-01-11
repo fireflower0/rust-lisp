@@ -60,6 +60,19 @@ macro_rules! vector {
     }}
 }
 
+// type utility functions
+
+pub fn error(s: &str) -> RlRet {
+    Err(ErrString(s.to_string()))
+}
+
+pub fn format_error(e: RlErr) -> String {
+    match e {
+        ErrString(s) => s.clone(),
+        ErrRlVal(mv) => mv.pr_str(true),
+    }
+}
+
 // Functions
 
 impl RlVal {
@@ -151,10 +164,6 @@ impl RlVal {
             _ => error("meta not supported by type"),
         }
     }
-}
-
-pub fn error(s: &str) -> RlRet {
-    Err(ErrString(s.to_string()))
 }
 
 pub fn _assoc(mut hm: FnvHashMap<String, RlVal>, kvs: RlArgs) -> RlRet {
