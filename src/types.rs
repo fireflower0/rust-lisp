@@ -164,6 +164,20 @@ impl RlVal {
             _ => error("meta not supported by type"),
         }
     }
+
+    pub fn with_meta(&mut self, new_meta: &RlVal) -> RlRet {
+        match self {
+            List(_, ref mut meta)
+                | Vector(_, ref mut meta)
+                | Hash(_, ref mut meta)
+                | Func(_, ref mut meta)
+                | RlFunc { ref mut meta, .. } => {
+                    *meta = Rc::new((&*new_meta).clone());
+                }
+            _ => return error("with-meta not supported by type"),
+        };
+        Ok(self.clone())
+    }
 }
 
 pub fn _assoc(mut hm: FnvHashMap<String, RlVal>, kvs: RlArgs) -> RlRet {
