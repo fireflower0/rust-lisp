@@ -180,6 +180,25 @@ impl RlVal {
     }
 }
 
+impl PartialEq for RlVal {
+    fn eq(&self, other: &RlVal) -> bool {
+        match (self, other) {
+            (Nil, Nil) => true,
+            (Bool(ref a), Bool(ref b)) => a == b,
+            (Int(ref a), Int(ref b)) => a == b,
+            (Str(ref a), Str(ref b)) => a == b,
+            (Sym(ref a), Sym(ref b)) => a == b,
+            (List(ref a, _), List(ref b, _))
+                | (Vector(ref a, _), Vector(ref b, _))
+                | (List(ref a, _), Vector(ref b, _))
+                | (Vector(ref a, _), List(ref b, _)) => a == b,
+            (Hash(ref a, _), Hash(ref b, _)) => a == b,
+            (RlFunc { .. }, RlFunc { .. }) => false,
+            _ => false,
+        }
+    }
+}
+
 pub fn _assoc(mut hm: FnvHashMap<String, RlVal>, kvs: RlArgs) -> RlRet {
     if kvs.len() % 2 != 0 {
         return error("odd number of elements");
