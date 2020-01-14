@@ -73,6 +73,10 @@ pub fn format_error(e: RlErr) -> String {
     }
 }
 
+pub fn atom(rv: &RlVal) -> RlVal {
+    Atom(Rc::new(RefCell::new(rv.clone())))
+}
+
 // Functions
 
 impl RlVal {
