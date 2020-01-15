@@ -203,6 +203,10 @@ impl PartialEq for RlVal {
     }
 }
 
+pub fn func(f: fn(RlArgs) -> RlRet) -> RlVal {
+    Func(f, Rc::new(Nil))
+}
+
 pub fn _assoc(mut hm: FnvHashMap<String, RlVal>, kvs: RlArgs) -> RlRet {
     if kvs.len() % 2 != 0 {
         return error("odd number of elements");
